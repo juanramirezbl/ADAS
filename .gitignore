@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.ipynb_checkpoints/
+
+# Datos y modelos pesados
+data/
+!data/README.md
+models/
+!models/.gitkeep
+outputs/
+!outputs/.gitkeep
+
+# macOS
+.DS_Store
