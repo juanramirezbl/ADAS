@@ -9,4 +9,4 @@ Built with **Core ML** + **Swift**, using quantized models for low latency and b
 
 Para ver todos los requisitos funcionales y no funcionales del proyecto, consulta el siguiente documento:
 
-- [Especificación de Requisitos del Software (ERS)](./REQUISITOS.md)
+- [Especificación de Requisitos del Software (ERS)](./requirements.md)
