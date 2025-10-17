@@ -5,3 +5,8 @@ It provides three real-time features: lane departure warning, traffic sign recog
 Built with **Core ML** + **Swift**, using quantized models for low latency and battery efficiency.
 
 
+## Requisitos
+
+Para ver todos los requisitos funcionales y no funcionales del proyecto, consulta el siguiente documento:
+
+- [Especificación de Requisitos del Software (ERS)](./REQUISITOS.md)
