@@ -4,7 +4,6 @@
 It provides three real-time features: lane departure warning, traffic sign recognition, and pedestrian detection.  
 Built with **Core ML** + **Swift**, using quantized models for low latency and battery efficiency.
 
-
 ## Requisitos
 
 Para ver todos los requisitos funcionales y no funcionales del proyecto, consulta el siguiente documento:
