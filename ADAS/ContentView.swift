@@ -1,21 +1,14 @@
-//
-//  ContentView.swift
-//  ADAS
-//
-//  Created by Juan Ramirez Blanco on 10/11/25.
-//
+
 
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        // Use the "bridge" to show your camera view
+        // .ignoresSafeArea() makes it fill the whole screen,
+        // including behind the notch and home bar.
+        CameraViewRepresentable()
+            .ignoresSafeArea()
     }
 }
 
