@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct DetectionView: View {
     var body: some View {
         // Use the "bridge" to show your camera view
         // .ignoresSafeArea() makes it fill the whole screen,
@@ -13,5 +13,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    DetectionView()
 }
