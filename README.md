@@ -1,5 +1,5 @@
-# 📱 Proyecto: Detector de Señales de Tráfico  
-### Documento de Requisitos (RF, RNF, RUI, RTFG)
+
+# Documento de Requisitos (RF, RNF, RUI, RTFG)
 
 ---
 
