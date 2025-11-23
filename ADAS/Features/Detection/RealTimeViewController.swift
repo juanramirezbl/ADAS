@@ -57,7 +57,6 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
     
     private func setupVision() {
         // 1. Load your model
-        // (CRITICAL: Change "YOLOv3Tiny" if your model file has a different class name)
         guard let model = try? VNCoreMLModel(for: YOLOv3Tiny().model) else {
             fatalError("Could not load Core ML model. Check the model name.")
         }
@@ -92,7 +91,7 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
         
         // --- 4. Set the Camera Output ---
         let videoOutput = AVCaptureVideoDataOutput()
-        videoOutput.alwaysDiscardsLateVideoFrames = true // Don't build up a queue of old frames
+        videoOutput.alwaysDiscardsLateVideoFrames = true
         videoOutput.setSampleBufferDelegate(self, queue: self.dataOutputQueue)
         
         if self.captureSession.canAddOutput(videoOutput) {
@@ -103,7 +102,7 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
 
         // --- 5. Set up the Preview Layer ---
         self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
-        self.previewLayer.videoGravity = .resizeAspectFill // Fill the screen
+        self.previewLayer.videoGravity = .resizeAspectFill
         self.previewLayer.frame = self.view.bounds
         self.view.layer.addSublayer(self.previewLayer)
         
@@ -111,12 +110,11 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
         self.drawingLayer = CALayer()
         self.drawingLayer.frame = self.view.bounds
         self.drawingLayer.opacity = 0.7
-        self.view.layer.addSublayer(self.drawingLayer) // Add it ON TOP of the preview layer
+        self.view.layer.addSublayer(self.drawingLayer)
     }
     
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
     
-    // This is the function that gets called FOR EVERY FRAME from the camera
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
@@ -127,7 +125,6 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
             return
         }
 
-        // Perform the Vision request on this pixel buffer
         let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
         do {
             try handler.perform([request])
@@ -138,7 +135,6 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
     
     // MARK: - Handle Detections
     
-    // This function is the "completionHandler" for the Vision request
     private func handleDetections(request: VNRequest, error: Error?) {
         if let error = error {
             print("Vision request failed: \(error.localizedDescription)")
@@ -149,7 +145,6 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
             return
         }
         
-        // Update the UI on the main thread
         DispatchQueue.main.async {
             self.drawBoundingBoxes(observations: results)
         }
@@ -162,21 +157,16 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
     }
     
     private func drawBoundingBoxes(observations: [VNRecognizedObjectObservation]) {
-        // 1. Clear old boxes
         self.clearDrawings()
         
-        // 2. Get the size of the layer we are drawing on
         let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0, y: -self.drawingLayer.frame.height)
         let scale = CGAffineTransform.identity.scaledBy(x: self.drawingLayer.frame.width, y: self.drawingLayer.frame.height)
         
-        // 3. Loop through all detections
         for observation in observations {
             guard let topLabel = observation.labels.first else { continue }
             
-            // Only draw if confidence is high (e.g., > 50%)
             if topLabel.confidence < 0.5 { continue }
             
-            // --- Create the Bounding Box Layer ---
             let bounds = observation.boundingBox
             let rect = bounds.applying(scale).applying(transform)
 
@@ -187,14 +177,12 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
             boxLayer.cornerRadius = 4
             self.drawingLayer.addSublayer(boxLayer)
             
-            // --- Create the Text Label Layer ---
             let textLayer = CATextLayer()
             textLayer.string = "\(topLabel.identifier) \(String(format: "%.2f", topLabel.confidence))"
             textLayer.fontSize = 14
             textLayer.foregroundColor = UIColor.red.cgColor
             textLayer.backgroundColor = UIColor.black.withAlphaComponent(0.6).cgColor
             textLayer.cornerRadius = 4
-            // Position the text label slightly above the box
             textLayer.frame = CGRect(x: rect.origin.x, y: rect.origin.y - 20, width: rect.width, height: 20)
             
             self.drawingLayer.addSublayer(textLayer)

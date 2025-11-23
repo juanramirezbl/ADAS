@@ -10,7 +10,7 @@ struct CameraViewRepresentable: UIViewControllerRepresentable {
         return RealTimeViewController()
     }
     
-    // 2. This is for passing data from SwiftUI TO UIKit, which we don't need
+    // 2. This is for passing data from SwiftUI TO UIKit
     func updateUIViewController(_ uiViewController: RealTimeViewController, context: Context) {
         
     }
