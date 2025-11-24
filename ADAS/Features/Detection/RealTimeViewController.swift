@@ -57,7 +57,7 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
     
     private func setupVision() {
         // 1. Load your model
-        guard let model = try? VNCoreMLModel(for: YOLOv3Tiny().model) else {
+        guard let model = try? VNCoreMLModel(for: yolov8n().model) else {
             fatalError("Could not load Core ML model. Check the model name.")
         }
 
