@@ -12,15 +12,11 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
     private var drawingLayer: CALayer!
 
     
-    // 2. AV FOUNDATION (CAMERA)
-    // --------------------------
-    // The main session that manages camera input and output
+    
     private let captureSession = AVCaptureSession()
     
-    // A layer to show the camera feed
     private var previewLayer: AVCaptureVideoPreviewLayer!
     
-    // A background queue for processing frames
     private let dataOutputQueue = DispatchQueue(
         label: "com.example.videoDataQueue",
         qos: .userInitiated,
@@ -42,7 +38,6 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
         }
     }
     
-    // This function runs when the view's orientation or size changes
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if let previewLayer = self.previewLayer {
@@ -56,7 +51,7 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
     // MARK: - Core ML & Vision Setup
     
     private func setupVision() {
-        // 1. Load your model
+        // 1. Load model
         guard let model = try? VNCoreMLModel(for: yolov8n().model) else {
             fatalError("Could not load Core ML model. Check the model name.")
         }
@@ -69,16 +64,13 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
     // MARK: - Camera (AVFoundation) Setup
     
     private func setupCamera() {
-        // --- 1. Configure the Session ---
         self.captureSession.sessionPreset = .vga640x480
 
-        // --- 2. Get the Camera Device ---
         guard let cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
             print("Error: Could not find back camera.")
             return
         }
         
-        // --- 3. Set the Camera Input ---
         do {
             let cameraInput = try AVCaptureDeviceInput(device: cameraDevice)
             if self.captureSession.canAddInput(cameraInput) {
@@ -89,7 +81,6 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
             return
         }
         
-        // --- 4. Set the Camera Output ---
         let videoOutput = AVCaptureVideoDataOutput()
         videoOutput.alwaysDiscardsLateVideoFrames = true
         videoOutput.setSampleBufferDelegate(self, queue: self.dataOutputQueue)
@@ -100,13 +91,11 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
         
         videoOutput.connection(with: .video)?.isEnabled = true
 
-        // --- 5. Set up the Preview Layer ---
         self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
         self.previewLayer.videoGravity = .resizeAspectFill
         self.previewLayer.frame = self.view.bounds
         self.view.layer.addSublayer(self.previewLayer)
         
-        // --- 6. Set up the Drawing Layer ---
         self.drawingLayer = CALayer()
         self.drawingLayer.frame = self.view.bounds
         self.drawingLayer.opacity = 0.7

@@ -59,7 +59,7 @@ struct HomeView: View {
                 
                 // SettingsButton
                 NavigationLink {
-                    Text("Settings Screen")
+                    SettingsView()
                 } label: {
                     HStack {
                         Image(systemName: "gearshape.fill")
