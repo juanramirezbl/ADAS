@@ -162,14 +162,14 @@ class RealTimeViewController: UIViewController, AVCaptureVideoDataOutputSampleBu
             let boxLayer = CALayer()
             boxLayer.frame = rect
             boxLayer.borderWidth = 3
-            boxLayer.borderColor = UIColor.red.cgColor
+            boxLayer.borderColor = UIColor.green.cgColor
             boxLayer.cornerRadius = 4
             self.drawingLayer.addSublayer(boxLayer)
             
             let textLayer = CATextLayer()
             textLayer.string = "\(topLabel.identifier) \(String(format: "%.2f", topLabel.confidence))"
             textLayer.fontSize = 14
-            textLayer.foregroundColor = UIColor.red.cgColor
+            textLayer.foregroundColor = UIColor.green.cgColor
             textLayer.backgroundColor = UIColor.black.withAlphaComponent(0.6).cgColor
             textLayer.cornerRadius = 4
             textLayer.frame = CGRect(x: rect.origin.x, y: rect.origin.y - 20, width: rect.width, height: 20)
